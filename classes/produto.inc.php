@@ -1,3 +1,5 @@
+<!-- Lucas Torres Sobral 2020204062 -->
+
 <?php
     class Produto{
         public $produto_id;
@@ -7,7 +9,7 @@
         public $estoque;
         public $descricao;
         public $resumo;
-        public $refencia;
+        public $referencia;
         public $cod_fabricante;
 
         //TESTAR UTILIZANDO SOMENTE O CONSTRUTOR COM PARAMETROS

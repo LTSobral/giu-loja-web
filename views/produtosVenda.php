@@ -1,3 +1,4 @@
+<!-- Lucas Torres Sobral 2020204062 -->
 
 <?php
   include_once '../classes/produto.inc.php';
@@ -21,7 +22,17 @@
         <p class="card-text"><?= $prod->getResumo()?></p>
         <h6 class="card-text text-end"><?= $prod->getCodFabricante()?></h6>
         <h4 class="card-title">R$<?= $prod->getPreco()?></h4>
-        <div class="text-end"><?php echo "<a href='../controlers/controlerCarrinho.php?opcao=1&id=".$prod->getProdutoId()."' class='btn btn-danger'>Comprar</a>" ?></div>        
+        <div class="text-end">
+
+          <?php
+            if ($prod->getEstoque() > 5) {
+              echo "<a href='../controlers/controlerCarrinho.php?opcao=1&id=".$prod->getProdutoId()."' class='btn btn-danger'>Comprar</a>";
+            } else {
+              echo "<h4 class='card-text'>Produto Indisponível</h4>";
+            }
+          ?>
+
+        </div>        
       </div>
     </div>
 </div>

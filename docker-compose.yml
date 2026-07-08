@@ -1,0 +1,62 @@
+services:
+  # Serviço web: PHP + Apache servindo a aplicação.
+  web:
+    build: .
+    container_name: giu_loja_web
+    ports:
+      - "8082:80"
+    volumes:
+      # BIND MOUNT: o código do host é montado no container.
+      # Edições feitas localmente refletem imediatamente, sem rebuild.
+      - ./:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: lojaweb
+      DB_USER: app
+      DB_PASS: app
+      APP_DEBUG: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # Serviço de banco de dados MariaDB.
+  db:
+    image: mariadb:10.11
+    container_name: giu_loja_db
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: lojaweb
+      MARIADB_USER: app
+      MARIADB_PASSWORD: app
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      # Persistência dos dados do banco.
+      - giu_db_data:/var/lib/mysql
+      # Scripts em /docker-entrypoint-initdb.d rodam na primeira subida,
+      # criando as tabelas e dados iniciais automaticamente.
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # (Opcional) phpMyAdmin para inspecionar o banco pelo navegador.
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: giu_loja_pma
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: "3306"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  giu_db_data:

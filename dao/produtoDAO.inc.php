@@ -1,3 +1,5 @@
+<!-- Lucas Torres Sobral 2020204062 -->
+
 <?php
 require_once '../utils/funcoesUteis.php';
 require_once 'conexao.inc.php';
@@ -136,6 +138,20 @@ class ProdutoDao{
 
         $fab = $sql->fetch(PDO::FETCH_OBJ);
         return $fab->nome;
+    }
+
+    public function alterarRemoverEstoque($produto_id, $quantidade){
+        $sql = $this->con->prepare(
+            "
+            update produtos
+            set estoque = estoque - :quantidade
+            where produto_id = :produto_id
+            "
+        );
+
+        $sql->bindValue(":quantidade", $quantidade);
+        $sql->bindValue(":produto_id", $produto_id);
+        $sql->execute();
     }
 }
 ?>

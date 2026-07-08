@@ -1,3 +1,5 @@
+<!-- Lucas Torres Sobral 2020204062 -->
+
 <?php
     function array_search2($chave, $vetor){
         $index = -1;
@@ -14,6 +16,7 @@
     require_once '../classes/produto.inc.php';
     require_once '../classes/item.inc.php';
     $opcao = $_REQUEST['opcao'];
+    $cupom = $_REQUEST['pCupom'];
 
     if($opcao==1){ //inserir no carrinho
         $id = $_REQUEST['id'];
@@ -91,6 +94,7 @@
 
         $total = $_REQUEST['total'];
         $_SESSION['total'] = $total;
+        $_SESSION['cupom'] = $cupom;
 
         if(isset($_SESSION['cliente'])){
             header('Location: ../views/dadosCompra.php');
